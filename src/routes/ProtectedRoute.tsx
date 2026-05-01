@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import type { Role } from '../api/types/shared.types';
+import LogoLoader from '../components/ui/LogoLoader';
 
 interface ProtectedRouteProps {
   allowedRoles?: Role[];
@@ -13,8 +14,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+      <div
+        style={{
+          display: 'flex',
+          height: '100vh',
+          width: '100vw',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #0a0a0f 0%, #0f1117 50%, #0a0c14 100%)',
+        }}
+      >
+        <LogoLoader />
       </div>
     );
   }
@@ -26,10 +36,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     // If user role is not allowed, redirect to their default dashboard
-    const defaultPath = user.role === 'ADMIN' || user.role === 'SUPERADMIN' 
-      ? '/admin' 
+    const defaultPath = user.role === 'ADMIN' || user.role === 'SUPERADMIN'
+      ? '/admin'
       : '/hunter';
-    
+
     return <Navigate to={defaultPath} replace />;
   }
 

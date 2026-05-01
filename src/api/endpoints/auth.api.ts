@@ -7,13 +7,13 @@ export const authApi = {
     const response = await axiosInstance.get<ApiResponse<AuthMeResponse>>('/user/profile');
     return response.data;
   },
-  
+
   logout: async () => {
     const response = await axiosInstance.post<ApiResponse<void>>('/auth/logout');
     return response.data;
   },
-  
-  // Note: OAuth initiation is usually done via window.location for redirects
+
+  // OAuth initiation via full redirect
   initiateXLogin: () => {
     window.location.href = `${axiosInstance.defaults.baseURL}/auth/x`;
   },
@@ -24,10 +24,4 @@ export const authApi = {
     });
     return response.data;
   },
-
-  mockLogin: async (role: 'USER' | 'ADMIN') => {
-    // This is for development only
-    const response = await axiosInstance.post<ApiResponse<AuthMeResponse>>('/auth/mock', { role });
-    return response.data;
-  }
 };

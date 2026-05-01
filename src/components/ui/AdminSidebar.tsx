@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BarChart3,
@@ -54,10 +54,10 @@ export function AdminSidebar() {
         "flex items-center gap-3 px-4 h-16 shrink-0 border-b border-zinc-800/60",
         isCollapsed && !isMobile && "justify-center px-0"
       )}>
-        {/* Logo mark */}
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shrink-0">
-          <span className="text-sm font-black text-black">B</span>
-        </div>
+        {/* Logo mark — links to landing */}
+        <Link to="/" className="shrink-0 transition-opacity hover:opacity-80">
+          <img src="/bf-logo.svg" alt="BlockForge" className="w-8 h-8 object-contain" />
+        </Link>
         {(!isCollapsed || isMobile) && (
           <div className="flex items-baseline gap-1.5">
             <span className="text-base font-bold text-zinc-100 tracking-tight">

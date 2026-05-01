@@ -11,10 +11,10 @@ interface User {
   displayName?: string;
   profileImage?: string;
   walletAddress?: string;
-  availableBalanceUsdc: number;
-  pendingBalanceUsdc: number;
-  outgoingBalanceUsdc: number;
-  balanceUsdc: number;
+  availableBalanceUsdc: string;
+  pendingBalanceUsdc: string;
+  outgoingBalanceUsdc: string;
+  balanceUsdc: string;
   createdAt: string;
 }
 

@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   LayoutDashboard,
@@ -44,10 +44,10 @@ export function HunterSidebar() {
           isCollapsed && !isMobile && "justify-center px-0"
         )}
       >
-        {/* Logo mark */}
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shrink-0">
-          <span className="text-sm font-black text-white">B</span>
-        </div>
+        {/* Logo mark — links to landing */}
+        <Link to="/" className="shrink-0 transition-opacity hover:opacity-80">
+          <img src="/bf-logo.svg" alt="BlockForge" className="w-8 h-8 object-contain" />
+        </Link>
         {(!isCollapsed || isMobile) && (
           <div className="flex items-baseline gap-1.5">
             <span className="text-base font-bold text-stone-100 tracking-tight">

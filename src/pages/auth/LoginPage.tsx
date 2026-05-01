@@ -1,91 +1,120 @@
 import { authApi } from '../../api/endpoints/auth.api';
-import { useMockLogin } from '../../api/hooks/auth.hooks';
 import { useAuthStore } from '../../store/authStore';
-import { Navigate } from 'react-router-dom';
-import { LogIn, ShieldCheck, User } from 'lucide-react';
+import { Navigate, Link } from 'react-router-dom';
 import { Role } from '../../api/types/shared.types';
-import { getFriendlyErrorMessage } from '../../lib/error.utils';
+import { ArrowRight } from 'lucide-react';
+
+const XIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0" fill="currentColor" aria-hidden="true">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117Z" />
+  </svg>
+);
 
 const LoginPage = () => {
   const { isAuthenticated, user } = useAuthStore();
-  const mockLogin = useMockLogin();
 
   if (isAuthenticated && user) {
-    console.log('User is authenticated, redirecting...', user);
     const defaultPath = user.role === Role.USER ? '/hunter' : '/admin';
     return <Navigate to={defaultPath} replace />;
   }
 
   return (
-    <div className="min-h-screen bg-[#0f172a] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background Orbs */}
-      <div className="absolute top-0 -left-4 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-      <div className="absolute top-0 -right-4 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    <>
+      <style>{`
+        /* Orb drift */
+        @keyframes login-orb {
+          0%,100% { transform: translate(0,0) scale(1); }
+          40%      { transform: translate(30px,-40px) scale(1.07); }
+          70%      { transform: translate(-20px,25px) scale(0.95); }
+        }
+        .login-orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; animation: login-orb 16s ease-in-out infinite; }
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
-        <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl mb-2">
-          Block<span className="text-blue-500">Forge</span>
-        </h1>
-        <p className="text-gray-400 text-lg">Earn rewards by completing simple social tasks.</p>
-      </div>
+        /* Card entrance */
+        @keyframes login-enter {
+          from { opacity: 0; transform: translateY(24px) scale(0.97); filter: blur(4px); }
+          to   { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0px); }
+        }
+        .login-card { animation: login-enter 0.55s cubic-bezier(0.22,1,0.36,1) forwards; }
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="bg-slate-900/50 backdrop-blur-xl py-8 px-4 border border-white/10 shadow-2xl shadow-blue-500/10 sm:rounded-2xl sm:px-10">
-          <div className="space-y-6">
-            <div>
-              <button
-                onClick={() => authApi.initiateXLogin()}
-                className="w-full flex justify-center items-center gap-3 py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform active:scale-95"
-              >
-                <LogIn className="h-5 w-5" />
-                Authorize with X
-              </button>
-            </div>
+        /* X button shimmer */
+        @keyframes x-shimmer {
+          0%   { background-position: -200% center; }
+          100% { background-position:  200% center; }
+        }
+        .x-btn-inner {
+          background: linear-gradient(110deg, #f59e0b 0%, #fbbf24 40%, #fef3c7 50%, #fbbf24 60%, #f59e0b 100%);
+          background-size: 200% auto;
+          transition: box-shadow 0.2s, transform 0.15s;
+        }
+        .x-btn-inner:hover {
+          animation: x-shimmer 1.3s linear infinite;
+          box-shadow: 0 0 28px rgba(245,158,11,0.35);
+          transform: translateY(-1px);
+        }
+        .x-btn-inner:active { transform: scale(0.97); }
+      `}</style>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/10"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-slate-900 text-gray-500 uppercase tracking-widest text-[10px] font-bold">Development Mode</span>
-              </div>
-            </div>
+      {/* Brick-wall login background */}
+      <div className="login-bg min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
 
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => mockLogin.mutate(Role.USER)}
-                disabled={mockLogin.isPending}
-                className="flex items-center justify-center gap-2 py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-gray-300 rounded-xl border border-white/5 text-sm font-medium transition-all hover:text-white"
-              >
-                <User size={16} />
-                Mock Hunter
-              </button>
-              <button
-                onClick={() => mockLogin.mutate(Role.ADMIN)}
-                disabled={mockLogin.isPending}
-                className="flex items-center justify-center gap-2 py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-gray-300 rounded-xl border border-white/5 text-sm font-medium transition-all hover:text-white"
-              >
-                <ShieldCheck size={16} />
-                Mock Admin
-              </button>
-            </div>
-            
-            {mockLogin.isError && (
-              <p className="text-center text-red-400 text-xs mt-2">
-                {getFriendlyErrorMessage(mockLogin.error)}
+        {/* Ambient orbs */}
+        <div className="login-orb w-[380px] h-[380px] bg-blue-600/20  top-[-80px]  left-[-60px]"  style={{ animationDelay: '0s' }} />
+        <div className="login-orb w-[320px] h-[320px] bg-amber-500/15 bottom-[-60px] right-[-40px]" style={{ animationDelay: '-6s' }} />
+
+        {/* Card */}
+        <div className="login-card relative z-10 w-full max-w-sm">
+          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl shadow-2xl shadow-black/50 p-8 flex flex-col items-center gap-6">
+
+            {/* Logo */}
+            <Link to="/" className="flex flex-col items-center gap-3 group">
+              <img
+                src="/bf-logo.svg"
+                alt="BlockForge"
+                className="h-16 w-16 object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+              <span className="text-2xl font-black tracking-tight text-white">BlockForge</span>
+            </Link>
+
+            {/* Divider */}
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+            {/* Copy */}
+            <div className="text-center space-y-1.5">
+              <h1 className="text-lg font-bold text-zinc-100">Sign in to start earning</h1>
+              <p className="text-xs text-zinc-500 leading-relaxed max-w-[220px] mx-auto">
+                Complete Web3 social tasks and earn USDC directly to your wallet.
               </p>
-            )}
+            </div>
+
+            {/* X OAuth button */}
+            <button
+              id="signin-with-x"
+              onClick={() => authApi.initiateXLogin()}
+              className="x-btn-inner w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-2xl font-black text-sm text-black"
+            >
+              <XIcon />
+              Continue with X
+              <ArrowRight size={14} />
+            </button>
+
+            {/* Terms */}
+            <p className="text-[10px] text-zinc-600 text-center leading-relaxed max-w-[230px]">
+              By continuing, you agree to BlockForge's{' '}
+              <span className="text-zinc-400 hover:text-zinc-200 cursor-pointer transition-colors">Terms of Service</span>
+              {' '}and{' '}
+              <span className="text-zinc-400 hover:text-zinc-200 cursor-pointer transition-colors">Privacy Policy</span>.
+            </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-white/5">
-            <p className="text-center text-xs text-gray-500 italic">
-              By authorizing, you agree to our Terms and Conditions.
-            </p>
+          {/* Back to landing */}
+          <div className="mt-5 text-center">
+            <Link to="/" className="text-[11px] text-zinc-600 hover:text-zinc-300 transition-colors">
+              ← Back to BlockForge
+            </Link>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

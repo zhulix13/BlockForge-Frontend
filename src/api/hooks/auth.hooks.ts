@@ -52,15 +52,3 @@ export const useXCallback = () => {
     }
   });
 };
-
-export const useMockLogin = () => {
-  const { setUser } = useAuthStore();
-  return useMutation({
-    mutationFn: (role: 'USER' | 'ADMIN') => authApi.mockLogin(role),
-    onSuccess: (response) => {
-      if (response.success) {
-        setUser(response.data);
-      }
-    }
-  });
-};
