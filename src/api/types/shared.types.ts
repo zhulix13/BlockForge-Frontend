@@ -64,8 +64,8 @@ export interface ApiResponse<T> {
 }
 
 export interface PaginatedResponse<T> {
-  items: T[];
-  meta: {
+  data: T[];
+  metadata: {
     total: number;
     page: number;
     limit: number;

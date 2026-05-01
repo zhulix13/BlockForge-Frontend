@@ -9,10 +9,10 @@ export interface AuthMeResponse {
   displayName?: string;
   profileImage?: string;
   walletAddress?: string;
-  balance: {
-    available: number;
-    pending: number;
-  };
+  availableBalanceUsdc: string;
+  pendingBalanceUsdc: string;
+  outgoingBalanceUsdc: string;
+  balanceUsdc: string; // Now Total Earnings
   createdAt: string;
   updatedAt: string;
 }

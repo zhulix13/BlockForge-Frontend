@@ -15,8 +15,11 @@ const CallbackPage = () => {
   const code = searchParams.get('code');
   const state = searchParams.get('state');
 
+  console.log('CallbackPage rendered. Code:', !!code, 'State:', !!state);
+
   useEffect(() => {
     if (code && state && !hasProcessed.current) {
+      console.log('Processing X callback...');
       hasProcessed.current = true;
       processCallback.mutate({ code, state });
     }

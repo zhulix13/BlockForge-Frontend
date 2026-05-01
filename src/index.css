@@ -1,1 +1,194 @@
 @import "tailwindcss";
+
+/* ===== FONT ===== */
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/7ab938503e4547a1-s.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== THEME TOKENS ===== */
+@theme {
+  --font-sans: "Geist", system-ui, -apple-system, sans-serif;
+
+  /* Admin palette — zinc + amber */
+  --color-admin-bg: #09090b;
+  --color-admin-surface: #18181b;
+  --color-admin-elevated: #27272a;
+  --color-admin-border: #3f3f46;
+  --color-admin-border-subtle: #27272a;
+  --color-admin-text: #fafafa;
+  --color-admin-text-secondary: #a1a1aa;
+  --color-admin-text-muted: #71717a;
+  --color-admin-accent: #f59e0b;
+  --color-admin-accent-hover: #d97706;
+  --color-admin-accent-subtle: rgba(245, 158, 11, 0.08);
+  --color-admin-accent-glow: rgba(245, 158, 11, 0.15);
+
+  /* Hunter palette — stone + royal blue */
+  --color-hunter-bg: #0c0a09;
+  --color-hunter-surface: #1c1917;
+  --color-hunter-elevated: #292524;
+  --color-hunter-border: #44403c;
+  --color-hunter-border-subtle: #292524;
+  --color-hunter-text: #fafaf9;
+  --color-hunter-text-secondary: #a8a29e;
+  --color-hunter-text-muted: #78716c;
+  --color-hunter-accent: #3b82f6;
+  --color-hunter-accent-hover: #2563eb;
+  --color-hunter-accent-subtle: rgba(59, 130, 246, 0.08);
+  --color-hunter-accent-glow: rgba(59, 130, 246, 0.15);
+
+  /* Status colors */
+  --color-status-success: #22c55e;
+  --color-status-danger: #ef4444;
+  --color-status-warning: #eab308;
+  --color-status-info: #3b82f6;
+  --color-status-pending: #f59e0b;
+}
+
+/* ===== BASE ===== */
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-admin-bg);
+    color: var(--color-admin-text);
+  }
+
+  /* Number formatting */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Scrollbar — thin, dark */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+  }
+}
+
+/* ===== UTILITIES ===== */
+@layer utilities {
+  /* Dot grid background */
+  .bg-dotgrid {
+    background-image: radial-gradient(circle, #3f3f46 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Glass card */
+  .glass {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-hover:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Glow accent */
+  .glow-amber {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.1),
+                0 0 60px rgba(245, 158, 11, 0.05);
+  }
+
+  /* Status pulse */
+  .pulse-live::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    animation: pulse-ring 2s ease-out infinite;
+    border: 2px solid currentColor;
+  }
+
+  @keyframes pulse-ring {
+    0% { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.5); }
+  }
+
+  /* Sidebar active indicator */
+  .nav-active {
+    background: var(--color-admin-accent-subtle);
+    border-left: 2px solid var(--color-admin-accent);
+    color: var(--color-admin-accent);
+  }
+
+  /* Hunter sidebar active indicator */
+  .nav-active-hunter {
+    background: var(--color-hunter-accent-subtle);
+    border-left: 2px solid var(--color-hunter-accent);
+    color: var(--color-hunter-accent);
+  }
+
+  /* Hunter glow accent */
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.1),
+                0 0 60px rgba(59, 130, 246, 0.05);
+  }
+
+  /* Hunter dot grid background */
+  .bg-dotgrid-hunter {
+    background-image: radial-gradient(circle, #44403c 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Premium Glass */
+  .glass-premium {
+    background: rgba(12, 10, 9, 0.7);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Animations */
+  @keyframes bounce-short {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .animate-bounce-short {
+    animation: bounce-short 1s ease-in-out infinite;
+  }
+
+  /* Custom Scrollbar Utility */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Hide scrollbar utility */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}

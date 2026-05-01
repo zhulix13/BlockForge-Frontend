@@ -1,10 +1,11 @@
-import type { SubmissionStatus } from './shared.types';
+import type { Role, SubmissionStatus } from "./shared.types";
+import type { Task, TaskStep } from "./task.types";
 
 export interface SubmissionProof {
   id: string;
   submissionId: string;
   taskStepId: string;
-  url: string;
+  proofLink: string;
   createdAt: string;
 }
 
@@ -19,6 +20,16 @@ export interface Submission {
   createdAt: string;
   updatedAt: string;
   proofs?: SubmissionProof[];
+  user?: {
+    createdAt: any;
+    id: string;
+    username: string;
+    displayName?: string;
+    profileImage?: string;
+    role: Role;
+    xId: string;
+  };
+  task?: Task;
 }
 
 export interface CreateSubmissionInput {
@@ -26,21 +37,23 @@ export interface CreateSubmissionInput {
   screenshotUrl: string;
   proofs: Array<{
     taskStepId: string;
-    url: string;
+    proofLink: string;
   }>;
 }
 
 export interface ReviewSubmissionInput {
-  status: 'APPROVED' | 'REJECTED';
+  status: "APPROVED" | "REJECTED";
   feedback?: string;
 }
 
 export interface UploadUrlInput {
-  contentType: 'image/png' | 'image/jpeg' | 'image/jpg' | 'image/webp';
+  contentType: "image/png" | "image/jpeg" | "image/jpg" | "image/webp";
   fileName: string;
+  taskId: string;
 }
 
 export interface UploadUrlResponse {
-  uploadUrl: string;
-  fileKey: string;
+  url: string;
+  fields?: Record<string, string>;
+  key: string;
 }

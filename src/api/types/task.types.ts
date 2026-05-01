@@ -1,4 +1,9 @@
-import type { TaskLevel, TaskStatus, StepType } from './shared.types';
+import type {
+  TaskLevel,
+  TaskStatus,
+  StepType,
+  SubmissionStatus,
+} from "./shared.types";
 
 export interface TaskStep {
   id: string;
@@ -9,14 +14,17 @@ export interface TaskStep {
   targetUrl: string;
   requiresLink: boolean;
   order: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Task {
+  _count: any;
   id: string;
   title: string;
   description?: string;
   level: TaskLevel;
-  rewardMicrounits: number; // BigInt on backend, number on frontend
+  rewardUsdc: string; // From the backend formatTask helper
   maxCompletions: number;
   completedCount: number;
   status: TaskStatus;
@@ -24,13 +32,14 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   steps?: TaskStep[];
+  userSubmissionStatus?: SubmissionStatus | null;
 }
 
 export interface CreateTaskInput {
   title: string;
   description?: string;
   level: TaskLevel;
-  rewardUsdc: number; // Will be converted to microunits on backend or before sending
+  rewardUsdc: number; // Input is a number for the form
   maxCompletions: number;
   steps: Array<{
     title: string;

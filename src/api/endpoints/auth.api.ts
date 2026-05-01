@@ -4,7 +4,7 @@ import type { ApiResponse } from '../types/shared.types';
 
 export const authApi = {
   getMe: async () => {
-    const response = await axiosInstance.get<ApiResponse<AuthMeResponse>>('/auth/me');
+    const response = await axiosInstance.get<ApiResponse<AuthMeResponse>>('/user/profile');
     return response.data;
   },
   

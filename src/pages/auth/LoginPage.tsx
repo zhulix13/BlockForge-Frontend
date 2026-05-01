@@ -4,12 +4,14 @@ import { useAuthStore } from '../../store/authStore';
 import { Navigate } from 'react-router-dom';
 import { LogIn, ShieldCheck, User } from 'lucide-react';
 import { Role } from '../../api/types/shared.types';
+import { getFriendlyErrorMessage } from '../../lib/error.utils';
 
 const LoginPage = () => {
   const { isAuthenticated, user } = useAuthStore();
   const mockLogin = useMockLogin();
 
   if (isAuthenticated && user) {
+    console.log('User is authenticated, redirecting...', user);
     const defaultPath = user.role === Role.USER ? '/hunter' : '/admin';
     return <Navigate to={defaultPath} replace />;
   }
@@ -71,7 +73,7 @@ const LoginPage = () => {
             
             {mockLogin.isError && (
               <p className="text-center text-red-400 text-xs mt-2">
-                {mockLogin.error instanceof Error ? mockLogin.error.message : 'Login failed'}
+                {getFriendlyErrorMessage(mockLogin.error)}
               </p>
             )}
           </div>
